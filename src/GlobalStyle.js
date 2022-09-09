@@ -29,7 +29,7 @@ export function GlobalStyle() {
         ul {
           padding: 0;
           margin: 0;
-          list-style: none;
+          /* list-style: none; */
         }
         img {
           display: block;

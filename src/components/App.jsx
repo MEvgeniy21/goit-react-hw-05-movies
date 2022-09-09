@@ -3,6 +3,7 @@ import { GlobalStyle } from 'GlobalStyle';
 import { Box } from 'common/Box';
 import Home from 'pages/Home';
 import NotFound from 'pages/NotFound';
+import SharedLayout from 'components/SharedLayout';
 
 export const App = () => {
   return (
@@ -15,9 +16,9 @@ export const App = () => {
         flexDirection="column"
       >
         <Routes>
-          <Route path="/" element={<Home />} />
-          {/* <Route path="/about" element={<About />} />
-          <Route path="/products" element={<Products />} /> */}
+          <Route path="/" element={<SharedLayout />}>
+            <Route index element={<Home />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Box>
