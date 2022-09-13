@@ -1,35 +1,39 @@
-import MovieList from 'components/MovieList';
-import Title from 'components/Title';
-import Error from 'components/Error';
 import Loader from 'components/Loader';
+import Error from 'components/Error';
 import { Box } from 'common/Box';
-import { fetchTrend } from 'api/fetchTheMovieDB';
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { fetchCreditsById } from 'api/fetchTheMovieDB';
 import { statusList } from 'constants';
 
-export default function Home() {
-  const [moviesDataTrend, setMoviesDataTrend] = useState([]);
+const MovieCredits = () => {
+  const { movieId } = useParams();
+
+  const [movieCreditsDataById, setMovieCreditsDataById] = useState(null);
   const [status, setStatus] = useState(statusList.IDLE);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const getMoviesTrend = async () => {
+    const getMoviesCreditsById = async () => {
       const { PENDING, RESOLVED, REJECTED } = statusList;
 
       setStatus(PENDING);
 
       try {
-        const data = await fetchTrend({ page: 1 });
+        const data = await fetchCreditsById({ movieId });
         setStatus(RESOLVED);
-        setMoviesDataTrend(data.results);
+        setMovieCreditsDataById(data);
       } catch (error) {
         setStatus(REJECTED);
         setError(error.message);
       }
     };
 
-    getMoviesTrend();
-  }, [setError, setStatus]);
+    getMoviesCreditsById();
+  }, [movieId, setError, setStatus]);
+
+  console.log(status);
+  console.log(movieCreditsDataById);
 
   if (status === statusList.PENDING) {
     return (
@@ -42,13 +46,8 @@ export default function Home() {
     return <Error error={error} />;
   }
   if (status === statusList.RESOLVED) {
-    return (
-      <>
-        <Box pt={4} pb={5}>
-          <Title>Trending today</Title>
-        </Box>
-        <MovieList moviesData={moviesDataTrend} />
-      </>
-    );
+    return <div>Credits</div>;
   }
-}
+};
+
+export default MovieCredits;

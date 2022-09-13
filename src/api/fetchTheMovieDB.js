@@ -3,7 +3,8 @@ import axios from 'axios';
 axios.defaults.baseURL = 'https://api.themoviedb.org/3/';
 
 const api_key = '6d25a4756e0ff1ccca3eba13a74efa5c';
-// const IMG_PATH = 'https://image.tmdb.org/t/p/w500';
+
+export const IMG_PATH = 'https://image.tmdb.org/t/p/w500';
 
 const mediaType = {
   ALL: 'all',
@@ -28,6 +29,38 @@ export async function fetchTrend({ page }) {
   });
   const response = await axios.get(
     `trending/${mediaType.MOVIE}/${trendTime.DAY}?${searchParams}`
+  );
+  return response.data;
+}
+
+export async function fetchMovieById({ movieId }) {
+  const options = new URLSearchParams({
+    api_key,
+    language: language.ENGLISH,
+  });
+  const response = await axios.get(`${mediaType.MOVIE}/${movieId}?${options}`);
+  return response.data;
+}
+
+export async function fetchCreditsById({ movieId }) {
+  const options = new URLSearchParams({
+    api_key,
+    language: language.ENGLISH,
+  });
+  const response = await axios.get(
+    `${mediaType.MOVIE}/${movieId}/credits?${options}`
+  );
+  return response.data;
+}
+
+export async function fetchReviewsById({ movieId, page }) {
+  const options = new URLSearchParams({
+    api_key,
+    page,
+    language: language.ENGLISH,
+  });
+  const response = await axios.get(
+    `${mediaType.MOVIE}/${movieId}/reviews?${options}`
   );
   return response.data;
 }
