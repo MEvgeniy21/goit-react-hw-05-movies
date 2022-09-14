@@ -5,12 +5,12 @@ import Error from 'components/Error';
 import Loader from 'components/Loader';
 import { Box } from 'common/Box';
 import { Outlet, Link, useParams, useLocation } from 'react-router-dom';
-import { fetchMovieById, IMG_PATH } from 'api/fetchTheMovieDB';
+import { fetchMovieById, IMG_PATH_W300 } from 'api/fetchTheMovieDB';
 import { useState, useEffect } from 'react';
 import { statusList } from 'constants';
-import * as SC from './MovieInfo.styled';
+import * as SC from './MovieDetails.styled';
 
-const MovieInfo = () => {
+const MovieDetails = () => {
   const { movieId } = useParams();
 
   const [movieDataById, setMovieDataById] = useState(null);
@@ -41,8 +41,8 @@ const MovieInfo = () => {
 
   const dateMovie = new Date(movieDataById?.release_date);
   const posterPath = movieDataById?.poster_path
-    ? IMG_PATH + movieDataById?.poster_path
-    : '';
+    ? IMG_PATH_W300 + movieDataById?.poster_path
+    : 'https://dummyimage.com/240x357/f5f5f5/a6a6a6.jpg&text=No+foto';
   const titleMovie = dateMovie
     ? `${movieDataById?.title} (${dateMovie.getFullYear()})`
     : movieDataById?.title;
@@ -53,11 +53,7 @@ const MovieInfo = () => {
   );
 
   if (status === statusList.PENDING) {
-    return (
-      <Box pt={6} pl={6}>
-        <Loader />
-      </Box>
-    );
+    return <Loader />;
   }
   if (status === statusList.REJECTED) {
     return <Error error={error} />;
@@ -67,7 +63,12 @@ const MovieInfo = () => {
       <>
         <BackLink to={backLinkHref}>Go back</BackLink>
         <Box display="flex" gridGap={4} pb={3} mt={2}>
-          <SC.Img src={posterPath} alt={movieDataById?.title} />
+          <SC.Img
+            src={posterPath}
+            alt={movieDataById?.title}
+            width="240"
+            height="357"
+          />
           <Box display="flex" flexDirection="column" gridGap={5} pt={4}>
             <Title>{titleMovie}</Title>
             <p>User score: {userScore}%</p>
@@ -81,10 +82,14 @@ const MovieInfo = () => {
           <p>Additional information</p>
           <SC.List>
             <li>
-              <Link to={`cast`}>Cast</Link>
+              <Link to={`cast`} state={{ from: backLinkHref }}>
+                Cast
+              </Link>
             </li>
             <li>
-              <Link to={`reviews`}>Reviews</Link>
+              <Link to={`reviews`} state={{ from: backLinkHref }}>
+                Reviews
+              </Link>
             </li>
           </SC.List>
         </SC.Info>
@@ -94,4 +99,4 @@ const MovieInfo = () => {
   }
 };
 
-export default MovieInfo;
+export default MovieDetails;

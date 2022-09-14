@@ -32,11 +32,7 @@ export default function Home() {
   }, [setError, setStatus]);
 
   if (status === statusList.PENDING) {
-    return (
-      <Box pt={6} pl={6}>
-        <Loader />
-      </Box>
-    );
+    return <Loader />;
   }
   if (status === statusList.REJECTED) {
     return <Error error={error} />;

@@ -4,7 +4,7 @@ const MovieItem = ({ title, id }) => {
   const location = useLocation();
 
   return (
-    <Link to={`movies/${id}`} state={{ from: location }}>
+    <Link to={`/movies/${id}`} state={{ from: location }}>
       {title}
     </Link>
   );

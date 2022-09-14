@@ -1,15 +1,16 @@
 import Loader from 'components/Loader';
 import Error from 'components/Error';
-import { Box } from 'common/Box';
+import CastItem from 'components/CastItem';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchCreditsById } from 'api/fetchTheMovieDB';
 import { statusList } from 'constants';
+import * as SC from './Cast.styled';
 
-const MovieCredits = () => {
+const Cast = () => {
   const { movieId } = useParams();
 
-  const [movieCreditsDataById, setMovieCreditsDataById] = useState(null);
+  const [castDataById, setCastDataById] = useState([]);
   const [status, setStatus] = useState(statusList.IDLE);
   const [error, setError] = useState('');
 
@@ -22,7 +23,7 @@ const MovieCredits = () => {
       try {
         const data = await fetchCreditsById({ movieId });
         setStatus(RESOLVED);
-        setMovieCreditsDataById(data);
+        setCastDataById(data.cast);
       } catch (error) {
         setStatus(REJECTED);
         setError(error.message);
@@ -32,22 +33,30 @@ const MovieCredits = () => {
     getMoviesCreditsById();
   }, [movieId, setError, setStatus]);
 
-  console.log(status);
-  console.log(movieCreditsDataById);
-
   if (status === statusList.PENDING) {
-    return (
-      <Box pt={6} pl={6}>
-        <Loader />
-      </Box>
-    );
+    return <Loader />;
   }
   if (status === statusList.REJECTED) {
     return <Error error={error} />;
   }
   if (status === statusList.RESOLVED) {
-    return <div>Credits</div>;
+    return (
+      <SC.Ul>
+        {castDataById.length !== 0 &&
+          castDataById.map(({ id, profile_path, name, character }) => {
+            return (
+              <SC.Li key={id}>
+                <CastItem
+                  profile_path={profile_path}
+                  name={name}
+                  character={character}
+                />
+              </SC.Li>
+            );
+          })}
+      </SC.Ul>
+    );
   }
 };
 
-export default MovieCredits;
+export default Cast;

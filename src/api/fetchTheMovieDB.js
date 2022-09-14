@@ -4,7 +4,8 @@ axios.defaults.baseURL = 'https://api.themoviedb.org/3/';
 
 const api_key = '6d25a4756e0ff1ccca3eba13a74efa5c';
 
-export const IMG_PATH = 'https://image.tmdb.org/t/p/w500';
+export const IMG_PATH_W300 = 'https://image.tmdb.org/t/p/w300';
+export const IMG_PATH_W200 = 'https://image.tmdb.org/t/p/w200';
 
 const mediaType = {
   ALL: 'all',
@@ -65,49 +66,13 @@ export async function fetchReviewsById({ movieId, page }) {
   return response.data;
 }
 
-// async fetchTrend() {
-//   const options = new URLSearchParams({
-//     api_key: Movie.API_KEY,
-//     page: this.#page,
-//     language: this.#langCurrent,
-//   });
-//   const response = await axios.get(
-//     `trending/${Movie.mediaType.MOVIE}/${this.#currentTrendTime}?${options}`
-//   );
-//   return response.data;
-// }
-
-// async fetchSearch() {
-//   const options = new URLSearchParams({
-//     api_key: Movie.API_KEY,
-//     page: this.#page,
-//     query: this.#query,
-//     language: this.#langCurrent,
-//   });
-//   const response = await axios.get(
-//     `search/${Movie.mediaType.MOVIE}?${options}`
-//   );
-//   return response.data;
-// }
-
-// async fetchGenre() {
-//   const options = new URLSearchParams({
-//     api_key: Movie.API_KEY,
-//     language: this.#langCurrent,
-//   });
-//   const response = await axios.get(
-//     `genre/${Movie.mediaType.MOVIE}/list?${options}`
-//   );
-//   return response.data;
-// }
-
-// async fetchById(idMovie) {
-//   const options = new URLSearchParams({
-//     api_key: Movie.API_KEY,
-//     language: this.#langCurrent,
-//   });
-//   const response = await axios.get(
-//     `${Movie.mediaType.MOVIE}/${idMovie}?${options}`
-//   );
-//   return response.data;
-// }
+export async function fetchSearch({ query, page }) {
+  const options = new URLSearchParams({
+    api_key,
+    page,
+    query,
+    language: language.ENGLISH,
+  });
+  const response = await axios.get(`search/${mediaType.MOVIE}?${options}`);
+  return response.data;
+}
