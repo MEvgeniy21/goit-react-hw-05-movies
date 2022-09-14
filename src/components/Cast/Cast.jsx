@@ -1,6 +1,7 @@
 import Loader from 'components/Loader';
 import Error from 'components/Error';
 import CastItem from 'components/CastItem';
+import { Box } from 'common/Box';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchCreditsById } from 'api/fetchTheMovieDB';
@@ -41,20 +42,25 @@ const Cast = () => {
   }
   if (status === statusList.RESOLVED) {
     return (
-      <SC.Ul>
-        {castDataById.length !== 0 &&
-          castDataById.map(({ id, profile_path, name, character }) => {
-            return (
-              <SC.Li key={id}>
-                <CastItem
-                  profile_path={profile_path}
-                  name={name}
-                  character={character}
-                />
-              </SC.Li>
-            );
-          })}
-      </SC.Ul>
+      <>
+        {castDataById.length !== 0 ? (
+          <SC.Ul>
+            {castDataById.map(({ id, profile_path, name, character }) => {
+              return (
+                <SC.Li key={id}>
+                  <CastItem
+                    profile_path={profile_path}
+                    name={name}
+                    character={character}
+                  />
+                </SC.Li>
+              );
+            })}
+          </SC.Ul>
+        ) : (
+          <Box mt={4}>No information about actors.</Box>
+        )}
+      </>
     );
   }
 };
