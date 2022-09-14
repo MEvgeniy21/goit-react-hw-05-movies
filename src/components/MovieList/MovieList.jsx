@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import MovieItem from 'components/MovieItem';
 import * as SC from './MovieList.styled';
 
@@ -17,3 +18,7 @@ const MovieList = ({ moviesData }) => {
 };
 
 export default MovieList;
+
+MovieList.propTypes = {
+  moviesData: PropTypes.arrayOf(PropTypes.object).isRequired,
+};

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Box } from 'common/Box';
 import { IMG_PATH_W200 } from 'api/fetchTheMovieDB';
 import * as SC from './CastItem.styled';
@@ -22,3 +23,9 @@ const CastItem = ({ profile_path, name, character }) => {
 };
 
 export default CastItem;
+
+CastItem.propTypes = {
+  profile_path: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  character: PropTypes.string.isRequired,
+};

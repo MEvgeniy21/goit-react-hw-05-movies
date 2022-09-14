@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Box } from 'common/Box';
 import * as SC from './ReviewsItem.styled';
 
@@ -11,3 +12,8 @@ const ReviewsItem = ({ author, content }) => {
 };
 
 export default ReviewsItem;
+
+ReviewsItem.propTypes = {
+  author: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+};

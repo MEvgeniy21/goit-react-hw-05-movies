@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import * as SC from './Subtitle.styled';
 
 const Subtitle = ({ children }) => {
@@ -5,3 +6,7 @@ const Subtitle = ({ children }) => {
 };
 
 export default Subtitle;
+
+Subtitle.propTypes = {
+  children: PropTypes.any.isRequired,
+};

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import * as SC from './Title.styled';
 
 const Title = ({ children }) => {
@@ -5,3 +6,7 @@ const Title = ({ children }) => {
 };
 
 export default Title;
+
+Title.propTypes = {
+  children: PropTypes.any.isRequired,
+};

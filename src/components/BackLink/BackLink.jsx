@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import * as SC from './BackLink.styled';
 
 const BackLink = ({ to, children }) => {
@@ -10,3 +11,8 @@ const BackLink = ({ to, children }) => {
 };
 
 export default BackLink;
+
+BackLink.propTypes = {
+  children: PropTypes.any.isRequired,
+  to: PropTypes.object.isRequired,
+};
