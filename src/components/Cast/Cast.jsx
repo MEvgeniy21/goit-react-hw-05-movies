@@ -58,7 +58,9 @@ const Cast = () => {
             })}
           </SC.Ul>
         ) : (
-          <Box mt={4}>No information about actors.</Box>
+          <Box mt={4} mb={4}>
+            No information about actors.
+          </Box>
         )}
       </>
     );

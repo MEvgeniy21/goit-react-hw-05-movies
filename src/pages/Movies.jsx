@@ -1,13 +1,13 @@
 import MovieList from 'components/MovieList';
 import Error from 'components/Error';
 import Loader from 'components/Loader';
+import SearchForm from 'components/SearchForm';
 import { Box } from 'common/Box';
 import { fetchSearch } from 'api/fetchTheMovieDB';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { statusList } from 'constants';
 import { toast } from 'react-toastify';
-import * as SC from './Movies.styled';
 
 const Movies = () => {
   const [moviesDataSearch, setMoviesDataSearch] = useState([]);
@@ -48,10 +48,8 @@ const Movies = () => {
     getMoviesSearch();
   }, [query, setError, setStatus, setSearchParams]);
 
-  const handleSubmit = evt => {
-    evt.preventDefault();
-    const form = evt.currentTarget;
-    const searchQuery = form.elements.query.value.trim().toLowerCase();
+  const handleSubmit = value => {
+    const searchQuery = value.trim().toLowerCase();
     if (searchQuery.length > 2) {
       setSearchParams({ query: searchQuery });
     } else {
@@ -63,12 +61,11 @@ const Movies = () => {
   const { PENDING, RESOLVED, REJECTED } = statusList;
   return (
     <Box ml={2} mt={6}>
-      <SC.Form onSubmit={handleSubmit}>
-        <SC.Input type="text" name="query" defaultValue={query} />
-        <button type="submit" disabled={status === PENDING}>
-          Search
-        </button>
-      </SC.Form>
+      <SearchForm
+        onSubmit={handleSubmit}
+        inputValue={query}
+        isDisabledBtn={status === PENDING}
+      />
       {status === PENDING && <Loader />}
       {status === REJECTED && <Error error={error} />}
       {status === RESOLVED && <MovieList moviesData={moviesDataSearch} />}

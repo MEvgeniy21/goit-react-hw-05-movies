@@ -4,13 +4,21 @@ import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import * as SC from './SharedLayout.styled';
 
+const navItems = [
+  { href: '/', text: 'Home' },
+  { href: '/movies', text: 'Movies' },
+];
+
 const SharedLayout = () => {
   return (
     <Box ml={2} mt={6}>
       <SC.Header>
         <SC.Nav>
-          <SC.Link to="/">Home</SC.Link>
-          <SC.Link to="/movies">Movies</SC.Link>
+          {navItems.map(({ href, text }) => (
+            <SC.Link key={href} to={href}>
+              {text}
+            </SC.Link>
+          ))}
         </SC.Nav>
       </SC.Header>
       <Suspense fallback={<Loader />}>

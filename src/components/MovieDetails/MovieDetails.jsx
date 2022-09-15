@@ -4,11 +4,17 @@ import BackLink from 'components/BackLink';
 import Error from 'components/Error';
 import Loader from 'components/Loader';
 import { Box } from 'common/Box';
+import { Suspense } from 'react';
 import { Outlet, Link, useParams, useLocation } from 'react-router-dom';
 import { fetchMovieById, IMG_PATH_W300 } from 'api/fetchTheMovieDB';
 import { useState, useEffect } from 'react';
 import { statusList } from 'constants';
 import * as SC from './MovieDetails.styled';
+
+const infoItems = [
+  { href: 'cast', text: 'Cast' },
+  { href: 'reviews', text: 'Reviews' },
+];
 
 const MovieDetails = () => {
   const { movieId } = useParams();
@@ -39,15 +45,21 @@ const MovieDetails = () => {
     getMoviesById();
   }, [movieId, setError, setStatus]);
 
-  const dateMovie = new Date(movieDataById?.release_date);
-  const posterPath = movieDataById?.poster_path
-    ? IMG_PATH_W300 + movieDataById?.poster_path
-    : 'https://dummyimage.com/240x357/f5f5f5/a6a6a6.jpg&text=No+foto';
+  if (!movieDataById) {
+    return null;
+  }
+  const { title, genres, overview, release_date, poster_path, vote_average } =
+    movieDataById;
+
+  const dateMovie = new Date(release_date);
+  const posterPath = poster_path
+    ? IMG_PATH_W300 + poster_path
+    : 'https://dummyimage.com/240x357/f5f5f5/a6a6a6.jpg&text=No+poster';
   const titleMovie = dateMovie
-    ? `${movieDataById?.title} (${dateMovie.getFullYear()})`
-    : movieDataById?.title;
-  const userScore = Math.trunc(movieDataById?.vote_average * 10);
-  const genresMovie = movieDataById?.genres.reduce(
+    ? `${title} (${dateMovie.getFullYear()})`
+    : title;
+  const userScore = Math.trunc(vote_average * 10);
+  const genresMovie = genres.reduce(
     (accum, genre) => `${accum} ${genre.name}`,
     ''
   );
@@ -63,17 +75,12 @@ const MovieDetails = () => {
       <>
         <BackLink to={backLinkHref}>Go back</BackLink>
         <Box display="flex" gridGap={4} pb={3} mt={2}>
-          <SC.Img
-            src={posterPath}
-            alt={movieDataById?.title}
-            width="240"
-            height="357"
-          />
+          <SC.Img src={posterPath} alt={title} width="240" height="357" />
           <Box display="flex" flexDirection="column" gridGap={5} pt={4}>
             <Title>{titleMovie}</Title>
             <p>User score: {userScore}%</p>
             <Subtitle>Overview</Subtitle>
-            <p>{movieDataById?.overview}</p>
+            <p>{overview}</p>
             <Subtitle>Genres</Subtitle>
             <p>{genresMovie}</p>
           </Box>
@@ -81,19 +88,18 @@ const MovieDetails = () => {
         <SC.Info>
           <p>Additional information</p>
           <SC.List>
-            <li>
-              <Link to={`cast`} state={{ from: backLinkHref }}>
-                Cast
-              </Link>
-            </li>
-            <li>
-              <Link to={`reviews`} state={{ from: backLinkHref }}>
-                Reviews
-              </Link>
-            </li>
+            {infoItems.map(({ href, text }) => (
+              <li key={href}>
+                <Link to={href} state={{ from: backLinkHref }}>
+                  {text}
+                </Link>
+              </li>
+            ))}
           </SC.List>
         </SC.Info>
-        <Outlet />
+        <Suspense fallback={<Loader />}>
+          <Outlet />
+        </Suspense>
       </>
     );
   }

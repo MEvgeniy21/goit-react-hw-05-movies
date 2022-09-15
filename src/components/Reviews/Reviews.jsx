@@ -54,7 +54,9 @@ const Reviews = () => {
             })}
           </SC.Ul>
         ) : (
-          <Box mt={4}>We don't have any reviews for this movie.</Box>
+          <Box mt={4} mb={4}>
+            We don't have any reviews for this movie.
+          </Box>
         )}
       </>
     );
